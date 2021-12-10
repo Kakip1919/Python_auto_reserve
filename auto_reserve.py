@@ -2,7 +2,16 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 from time import sleep
+import sys
+import os
 
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 def check():
     table = driver.find_element(By.CLASS_NAME, "p-reservation_customer_table")
@@ -13,7 +22,6 @@ def check():
         for i in range(len(td)):
             try:
                 js = "document.getElementsByClassName('hidden')[1].click()"
-                sleep(1)
                 driver.execute_script(js)
                 driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div[2]/div/div[4]/button").click()
                 break
@@ -25,7 +33,7 @@ def check():
 
 options = webdriver.ChromeOptions()
 
-driver = webdriver.Chrome(executable_path='chromedriver.exe')
+driver = webdriver.Chrome(resource_path('driver/chromedriver.exe'))
 
 driver.get("https://omakase.in/users/sign_in")
 
