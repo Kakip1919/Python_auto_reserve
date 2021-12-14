@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(['auto_reserve.py'],
              pathex=[],
-             binaries=[('driver/chromedriver.exe', './driver')],
+             binaries=[('./driver/chromedriver.exe', './driver')],
              datas=[],
              hiddenimports=[],
              hookspath=[],

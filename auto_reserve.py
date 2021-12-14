@@ -13,6 +13,7 @@ def resource_path(relative_path):
         base_path = os.path.dirname(__file__)
     return os.path.join(base_path, relative_path)
 
+
 def check():
     table = driver.find_element(By.CLASS_NAME, "p-reservation_customer_table")
     tbody = table.find_element(By.TAG_NAME, "tbody")
@@ -21,9 +22,11 @@ def check():
         td = trs[table_cell].find_elements(By.TAG_NAME, "td")
         for i in range(len(td)):
             try:
+                sleep(0.2)
                 js = "document.getElementsByClassName('hidden')[1].click()"
                 driver.execute_script(js)
-                driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div[2]/div/div[4]/button").click()
+                driver.find_element(By.XPATH,
+                                    "/html/body/div[3]/div[2]/div/div/div[2]/div/div[2]/div/div[2]/div/div[4]/button").click()
                 break
 
             except:
@@ -33,7 +36,11 @@ def check():
 
 options = webdriver.ChromeOptions()
 
-driver = webdriver.Chrome(resource_path('driver/chromedriver.exe'))
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+options.use_chromium = True
+
+driver = webdriver.Chrome(resource_path('driver/chromedriver.exe'), options=options)
 
 driver.get("https://omakase.in/users/sign_in")
 
@@ -45,11 +52,17 @@ driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div[1]/form/
 
 driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div[1]/form/input[2]").click()
 
-driver.execute_script("window.open('https://omakase.in/ja/r/qn865701');")
+driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/div[1]/form/div/div[3]/div/input").send_keys(
+    input("検索するお店を入力してください。"))
 
-driver.switch_to.window(driver.window_handles[1])
+
+driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/div[1]/form/div/div[4]/input").click()
+
+# driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[2]/div/div[2]/div/div[1]/div/a/div[2]/h4").click()
+js = "document.getElementsByClassName('ui button primary big fluid')[0].click()"
+driver.execute_script(js)
 
 driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[2]/div[1]/div[2]/div/div[1]/div/a").click()
-sleep(2)
 
+sleep(1)
 check()
