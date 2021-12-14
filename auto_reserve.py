@@ -4,6 +4,9 @@ from selenium.webdriver.remote.webelement import WebElement
 from time import sleep
 import sys
 import os
+import schedule
+import datetime
+from time import sleep
 
 
 def resource_path(relative_path):
@@ -15,6 +18,18 @@ def resource_path(relative_path):
 
 
 def check():
+    driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/div[1]/form/div/div[3]/div/input").send_keys(
+        input("検索するお店を入力してください。"))
+
+    driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/div[1]/form/div/div[4]/input").click()
+
+    driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[2]/div/div[2]/div/div[1]/div/a/div[2]/h4").click()
+
+    js = "document.getElementsByClassName('ui button primary big fluid')[0].click()"
+    driver.execute_script(js)
+
+    driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[2]/div[1]/div[2]/div/div[1]/div/a").click()
+
     table = driver.find_element(By.CLASS_NAME, "p-reservation_customer_table")
     tbody = table.find_element(By.TAG_NAME, "tbody")
     trs = tbody.find_elements(By.TAG_NAME, "tr")
@@ -52,17 +67,10 @@ driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div[1]/form/
 
 driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div[1]/form/input[2]").click()
 
-driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/div[1]/form/div/div[3]/div/input").send_keys(
-    input("検索するお店を入力してください。"))
+schedule.every().day.at("09:35").do(check)
+while True:
+    schedule.run_pending()
+    print("登録されたスケジュールまで待機中です。")
+    sleep(10)
 
 
-driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[1]/div[2]/div[1]/form/div/div[4]/input").click()
-
-# driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[2]/div/div[2]/div/div[1]/div/a/div[2]/h4").click()
-js = "document.getElementsByClassName('ui button primary big fluid')[0].click()"
-driver.execute_script(js)
-
-driver.find_element(By.XPATH, "/html/body/div[3]/div[2]/div[2]/div[1]/div[2]/div/div[1]/div/a").click()
-
-sleep(1)
-check()
